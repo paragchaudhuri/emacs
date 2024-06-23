@@ -1,0 +1,57 @@
+* First Heading
+
+ Here is *some* content.
+adsfadfdadsfasdfasdfasdfasdfasdfasdfasdfadsfasdfadsfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfadsfdsf
+
+ Here is the [[https://orgmode.org][Org Mode homepage]]
+
+** Sub-Heading
+
+ Here is more content
+ | Name      | Age | Uses Emacs |
+ |-----------+-----+------------|
+ | ASD       |  34 | Y          |
+ | alexandra |  67 | N          |
+ |           |     |            |
+
+ - [ ] First item
+ - [X] why is this?
+ - [ ] what!!
+ - [ ] mpty
+
+   1. sdfsdf
+   2. dfdgfdfg
+   3. yes i am
+   4. whos ae
+   
+* TODO Inserted heading
+
+   #+begin_src c
+
+     int main(int argc, char **argv)
+       {
+	 }
+   #+end_src
+   
+* Second Heading
+
+** _yes_
+
+*** /no/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
