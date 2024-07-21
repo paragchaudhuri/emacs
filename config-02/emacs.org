@@ -238,7 +238,7 @@ For more information, see [[https://www.emacswiki.org/emacs/LexicalBinding][http
       "." '(consult-fd :wk "Find file")
       "f c" '((lambda () (interactive) (find-file ~/.config/emacs/emacs.org)) :wk "Edit emacs config")
       "TAB TAB" '(comment-line :wk "Comment lines"))
-    
+
     (pec/leader-keys
       "b" '(:ignore t :wk "buffer")
       "b b" '(consult-buffer :wk "Switch buffer")
@@ -246,15 +246,19 @@ For more information, see [[https://www.emacswiki.org/emacs/LexicalBinding][http
       "b k" '(kill-this-buffer :wk "Kill this buffer")
       "b n" '(next-buffer :wk "Next buffer")
       "b p" '(previous-buffer :wk "Previous buffer")
-      "b r" '(revert-buffer :wk "Reload buffer"))
-    
+      "b r" '(revert-buffer :wk "Reload buffer")
+      "b <up>" '(windmove-swap-states-up :wk "Buffer move up")
+      "b <down>" '(windmove-swap-states-down :wk "Buffer move down")
+      "b <left>" '(windmove-swap-states-left :wk "Buffer move left")
+      "b <right>" '(windmove-swap-states-right :wk "Buffer move right"))
+
     (pec/leader-keys
       "d" '(:ignore t :wk "Dired")
       "d d" '(dired :wk "Open dired")
       "d j" '(dired-jump :wk "Dired jump to current")
       "d n" '(neotree-dir :wk "Open directory in neotree")
-      "d p" '(dired-preview-global-mode :wk "Dired preview mode toggle"))
-    
+      "d p" '(dired-preview-global-mo wde :wk "Dired preview mode toggle"))
+
     (pec/leader-keys
       "e" '(:ignore t :wk "Evaluate")
       "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
@@ -271,9 +275,9 @@ For more information, see [[https://www.emacswiki.org/emacs/LexicalBinding][http
       "h t" '(load-theme :wk "Load theme")
       "h v" '(describe-variable :wk "Describe variable")
       "h r r" '((lambda () (interactive)
-  		(load-file user-init-file)
-  		(ignore (elpaca-process-queues)))
-  	      :wk "Reload Emacs init.el"))
+                (load-file user-init-file)
+                (ignore (elpaca-process-queues)))
+              :wk "Reload Emacs init.el"))
 
     (pec/leader-keys
       "m" '(:ignore t :wk "Org")
@@ -292,7 +296,7 @@ For more information, see [[https://www.emacswiki.org/emacs/LexicalBinding][http
     (pec/leader-keys
       "m d" '(:ignore t :wk "Org date/deadline")
       "m d t" '(org-time-stamp :wk "Org time stamp"))
-      
+
     (pec/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
@@ -301,25 +305,31 @@ For more information, see [[https://www.emacswiki.org/emacs/LexicalBinding][http
 
     (pec/leader-keys
      "w" '(:ignore t :wk "Windows")
-     "w c" '(evil-window-delete :wk "Close window")
+     "w c" '(delete-window :wk "Close window")
      "w n" '(evil-window-new :wk "New window")
-     "w s" '(evil-window-split :wk "Horizontal split window")
-     "w v" '(evil-window-vsplit :wk "Vetically split window")
-
-     "w <left>" '(evil-window-left :wk "Window left")
-     "w <down>" '(evil-window-down :wk "Window down")
-     "w <up>" '(evil-window-up :wk "Window up")
-     "w <right>" '(evil-window-right :wk "Window right")
+     "w s" '(split-window-below :wk "Horizontal split window")
+     "w v" '(split-window-right :wk "Vertically split window")
+      "w <up>" '(windmove-up :wk "Window up")        
+      "w <down>" '(windmove-down :wk "Window down")
+     "w <left>" '(windmove-left :wk "Window left")
+      "w <right>" '(windmove-right :wk "Window right")
      "w w" '(evil-window-next :wk "Goto next window")
-
-     "w H" '(buf-move-left :wk "Buffer move left")
-     "w J" '(buf-move-down :wk "Buffer move down")
-     "w K" '(buf-move-up :wk "Buffer move up")
-     "w L" '(buf-move-right :wk "Buffer move right"))
+     "w u" '(winner-undo :wk "Winner undo")
+     "w U" '(winner-redo :wk "Winner redo"))
 
     (pec/leader-keys
       "o" '(ace-window :wk "Ace window"))
     )
+
+  (defvar-keymap pec/window-keys
+    :name "window"
+    :repeat t
+    "<left>" #'windmove-left
+    "<right>" #'windmove-right
+    "<up>" #'windmove-up
+    "<down>" #'windmove-down)
+
+   (keymap-global-set "C-c w" pec/window-keys)
 
 #+end_src
 
@@ -333,29 +343,28 @@ For more information, see [[https://www.emacswiki.org/emacs/LexicalBinding][http
   (use-package ace-window
     :ensure t
     :diminish
-    :config (ace-window-display-mode 1)
+    :init
+    (setq aw-dispatch-always t)
+    :config
+    (ace-window-display-mode 1)
     )
-  
+
 #+end_src
 
-** buffer-move
+** winner-mode
 
 #+begin_src emacs-lisp :tangle "init.el"
 
-  (use-package buffer-move
-    :ensure t
-    :bind (
-           ("C-S-<up>" . buf-move-up)
-           ("C-S-<down>" . buf-move-down)
-           ("C-S-<left>" . buf-move-left)
-           ("C-S-<right>" . buf-move-right))
+  (use-package winner-mode
+    :ensure nil
+    :init
+    (winner-mode)
     )
 
 #+end_src
 
 
 * Completions
-
 ** Vertico
 
 #+begin_src emacs-lisp :tangle "init.el"
