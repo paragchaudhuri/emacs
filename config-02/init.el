@@ -76,146 +76,35 @@
   :config
   (add-hook 'elpaca-after-init-hook (lambda () (gcmh-mode 1))))
 
-(use-package evil
-  :ensure t
-  :demand t
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
-  (evil-mode)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+;; (use-package evil
+;;   :ensure t
+;;   :demand t
+;;   :init
+;;   (setq evil-want-integration t)
+;;   (setq evil-want-keybinding nil)
+;;   (setq evil-vsplit-window-right t)
+;;   (setq evil-split-window-below t)
+;;   (evil-mode)
+;;   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+;;   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
-  ;;Use visual line motions even outside of visual-line-mode buffers
-  ;;(evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  ;;(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+;;   ;;Use visual line motions even outside of visual-line-mode buffers
+;;   ;;(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+;;   ;;(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
-  ;;Do not use evil mode in some buffers
-  ;(evil-set-initial-state 'messages-buffer-mode 'normal)
-  ;(evil-set-initial-state 'dashboard-mode 'normal)
-  )
+;;   ;;Do not use evil mode in some buffers
+;;   ;(evil-set-initial-state 'messages-buffer-mode 'normal)
+;;   ;(evil-set-initial-state 'dashboard-mode 'normal)
+;;   )
 
-(use-package evil-collection
-  :after evil
-  :after magit
-  :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
-  (evil-collection-init))
+;; (use-package evil-collection
+;;   :after evil
+;;   :after magit
+;;   :config
+;;   (setq evil-collection-mode-list '(dashboard dired ibuffer))
+;;   (evil-collection-init))
 
-;;(use-package evil-tutor)
-
-(use-package general
-  :ensure (:wait t)
-  :demand t
-  :config
-  (general-evil-setup)
-
-  ;; set up 'SPC' as the global leader key
-  (general-create-definer pec/leader-keys
-    :states '(normal insert visual emacs)
-    :keymaps 'override
-    :prefix "SPC" ;; set leader
-    :non-normal-prefix "S-SPC") ;; access leader in insert mode
-
-  (pec/leader-keys
-    "SPC" '(execute-extended-command :wk "M-x alternate")
-    "." '(consult-fd :wk "Find file")
-    "f c" '((lambda () (interactive) (find-file ~/.config/emacs/emacs.org)) :wk "Edit emacs config")
-    "TAB TAB" '(comment-line :wk "Comment lines"))
-
-  (pec/leader-keys
-    "b" '(:ignore t :wk "buffer")
-    "b b" '(consult-buffer :wk "Switch buffer")
-    "b i" '(ibuffer :wk "Ibuffer")
-    "b k" '(kill-this-buffer :wk "Kill this buffer")
-    "b n" '(next-buffer :wk "Next buffer")
-    "b p" '(previous-buffer :wk "Previous buffer")
-    "b r" '(revert-buffer :wk "Reload buffer")
-    "b <up>" '(windmove-swap-states-up :wk "Buffer move up")
-    "b <down>" '(windmove-swap-states-down :wk "Buffer move down")
-    "b <left>" '(windmove-swap-states-left :wk "Buffer move left")
-    "b <right>" '(windmove-swap-states-right :wk "Buffer move right"))
-
-  (pec/leader-keys
-    "d" '(:ignore t :wk "Dired")
-    "d d" '(dired :wk "Open dired")
-    "d j" '(dired-jump :wk "Dired jump to current")
-    "d n" '(neotree-dir :wk "Open directory in neotree")
-    "d p" '(dired-preview-global-mo wde :wk "Dired preview mode toggle"))
-
-  (pec/leader-keys
-    "e" '(:ignore t :wk "Evaluate")
-    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-    "e e" '(eval-expression :wk "Evaluate an eLisp expression")
-    "e l" '(eval-last-sexp :wk "Evaluate eLisp expression before point")
-    "e r" '(eval-region :wk "Evaluate eLisp in region")
-    "e s" '(eshell :wk "Wshell")
-    "e h" '(consult-history :wk "Eshell history"))
-
-  (pec/leader-keys
-    "h" '(:ignore t :wk "Help")
-    "h f" '(describe-function :wk "Describe function")
-    "h t" '(load-theme :wk "Load theme")
-    "h v" '(describe-variable :wk "Describe variable")
-    "h r r" '((lambda () (interactive)
-              (load-file user-init-file)
-              (ignore (elpaca-process-queues)))
-            :wk "Reload Emacs init.el"))
-
-  (pec/leader-keys
-    "m" '(:ignore t :wk "Org")
-    "m a" '(org-agenda :wk "Org agenda") 
-    "m b" '(org-babel-tangle :wk "Org babel tangle")
-    "m e" '(org-export-dispath :wk "Org export dispatch")
-    "m i" '(org-toggle-item :wk "Org toggle item")
-    "m h" '(consult-org-heading :wk "Goto Org heading")
-    "m t" '(org-todo :wk "Org todo")
-    "m T" '(org-todo-list :wk "Org todo list"))
-
-  (pec/leader-keys
-    "m l" '(:ignore t :wk "Org tables")
-    "m l -" '(org-table-insert-hline :wk "Insert hline in table"))
-
-  (pec/leader-keys
-    "m d" '(:ignore t :wk "Org date/deadline")
-    "m d t" '(org-time-stamp :wk "Org time stamp"))
-
-  (pec/leader-keys
-   "t" '(:ignore t :wk "Toggle")
-   "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-   "t t" '(visual-line-mode :wk "Toggle truncated lines")
-   "t v" '(vterm-toggle :wk "Toggle vterm"))
-
-  (pec/leader-keys
-   "w" '(:ignore t :wk "Windows")
-   "w c" '(delete-window :wk "Close window")
-   "w n" '(evil-window-new :wk "New window")
-   "w s" '(split-window-below :wk "Horizontal split window")
-   "w v" '(split-window-right :wk "Vertically split window")
-    "w <up>" '(windmove-up :wk "Window up")        
-    "w <down>" '(windmove-down :wk "Window down")
-   "w <left>" '(windmove-left :wk "Window left")
-    "w <right>" '(windmove-right :wk "Window right")
-   "w w" '(evil-window-next :wk "Goto next window")
-   "w u" '(winner-undo :wk "Winner undo")
-   "w U" '(winner-redo :wk "Winner redo"))
-
-  (pec/leader-keys
-    "o" '(ace-window :wk "Ace window"))
-  )
-
-(defvar-keymap pec/window-keys
-  :name "window"
-  :repeat t
-  "<left>" #'windmove-left
-  "<right>" #'windmove-right
-  "<up>" #'windmove-up
-  "<down>" #'windmove-down)
-
- (keymap-global-set "C-c w" pec/window-keys)
+;; ;;(use-package evil-tutor)
 
 (use-package ace-window
   :ensure t
@@ -226,31 +115,36 @@
   (ace-window-display-mode 1)
   )
 
-(use-package winner-mode
-  :ensure nil
-  :init
-  (winner-mode)
-  )
+(winner-mode)
+
+(tab-bar-mode 1)
 
 (use-package vertico
-  	:ensure t
-  	:demand t
-  	:bind (:map vertico-map
-  		    ("C-j" . vertico-next)
-  		    ("C-k" . vetico-previous)
-  		    ("C-f" . vertico-exit)
-  		    :map minibuffer-local-map
-  		    ("M-h" . backward-kill-word))
-  	:custom
-  	(vertico-cycle t)
-  	:init
-  	(vertico-mode))
+  :ensure t
+  :demand t
+  :bind (:map vertico-map
+    	    ("C-j" . vertico-next)
+    	    ("C-k" . vetico-previous)
+    	    ("C-f" . vertico-exit)
+    	    :map minibuffer-local-map
+    	    ("M-h" . backward-kill-word))
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
 
-  (use-package savehist
-  	:init
-  	(savehist-mode))
+;; (use-package vertico-posframe
+;;   :ensure t
+;;   :after vertico
+;;   :init
+;;   (vertico-posframe-mode)
+;;   )
 
-  ;; A few more useful configurations...
+(use-package savehist
+  :init
+  (savehist-mode))
+
+;; A few more useful configurations...
 (use-package emacs
   :custom
   ;; Support opening new minibuffers from inside existing minibuffers.
@@ -284,22 +178,24 @@
   (completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package corfu
-    :ensure t
+  :ensure t
   ;; Optional customizations
-    :custom
-    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-    (corfu-auto t)                 ;; Enable auto completion
-    (corfu-separator ?\s)          ;; Orderless field separator
-    (corfu-auto-prefix 2)
-    (corfu-auto-delay 0.0)
-    (corfu-quit-at-boundary 'separator)
-    (corfu-preview-current 'insert)
-    (corfu-preselect-first nil)
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-separator ?\s)          ;; Orderless field separator
+  (corfu-auto-prefix 2)
+  (corfu-auto-delay 0.0)
+  (corfu-quit-at-boundary 'separator)
+  (corfu-preview-current 'insert)
+  (corfu-preselect-first nil)
+  (corfu-popupinfo-delay '(1.25 . 0.5))
+
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
   ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+  (corfu-scroll-margin 5)        ;; Use scroll margin
 
   ;; Enable Corfu only for certain modes.
   ;; :hook ((prog-mode . corfu-mode)
@@ -506,24 +402,24 @@
   (setq dashboard-startupify-list '(dashboard-insert-banner
                                     dashboard-insert-newline
                                     dashboard-insert-banner-title
-				    dashboard-insert-newline 
-				    dashboard-insert-page-break
-				    dashboard-insert-newline
+  				  dashboard-insert-newline 
+  				  dashboard-insert-page-break
+  				  dashboard-insert-newline
                                     dashboard-insert-navigator
                                     dashboard-insert-newline
                                     dashboard-insert-init-info
                                     dashboard-insert-items
                                     dashboard-insert-newline
-				    dashboard-insert-page-break
-				    dashboard-insert-newline
+  				  dashboard-insert-page-break
+  				  dashboard-insert-newline
                                     dashboard-insert-footer))
   (setq dashboard-items '((recents . 5)
-			  (agenda . 5)
-			  (bookmarks . 3)
-			  (projects . 3)
-			  (registers . 3)))
+  			(agenda . 5)
+  			(bookmarks . 3)
+  			(projects . 3)
+  			(registers . 3)))
   (setq dashboard-modify-heading-icons '((recents   . "nf-oct-file_text")
-					 (bookmarks . "nf-oct-book")))
+  				       (bookmarks . "nf-oct-book")))
 
   :config
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
@@ -534,12 +430,12 @@
   :ensure t
   :config
   (setq dired-open-extentions '(("gif" . "sxiv")
-				("jpg" . "sxiv")
-				("jpeg" . "sxiv")
-				("png" . "sxiv")
-				("ppm" . "sxiv")
-				("mp4" . "mpv")
-				("mkv" . "mpv"))))
+  			      ("jpg" . "sxiv")
+  			      ("jpeg" . "sxiv")
+  			      ("png" . "sxiv")
+  			      ("ppm" . "sxiv")
+  			      ("mp4" . "mpv")
+  			      ("mkv" . "mpv"))))
 
 (use-package dired-preview
   :ensure t
@@ -630,6 +526,9 @@
 
 ;;(treemacs-start-on-boot)
 
+(setq ediff-split-window-function 'split-window-right
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+
 (set-face-attribute 'default nil
                      :font "Fira Code Retina"
                      :height 140
@@ -683,11 +582,15 @@
 (global-visual-line-mode t)
 
 ;;Hide line numbers in some modes
-(dolist (mode '(org-mode-hook
-              term-mode-hook
+(dolist (mode '(term-mode-hook
               shell-mode-hook
-              eshell-mode-hook))
+              eshell-mode-hook
+  	    pdf-view-mode-hook
+  	    treemacs-mode-hook))
 (add-hook mode (lambda() (display-line-numbers-mode 0))))
+
+(delete-selection-mode 1)
+(global-auto-revert-mode 1)
 
 (use-package page-break-lines
   :ensure t
@@ -698,29 +601,169 @@
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 
 (use-package all-the-icons
-    :ensure t)
+  :ensure t)
 
-  (use-package dired-subtree
-    :ensure t
-    :config
-    (advice-add 'dired-subtree-toggle :after (lambda () 
-  					     (interactive)
-  					     (when nerd-icons-dired-mode
-  					       (revert-buffer)))))
+(use-package dired-subtree
+  :ensure t
+  :config
+  (advice-add 'dired-subtree-toggle :after (lambda () 
+    					   (interactive)
+    					   (when nerd-icons-dired-mode
+    					     (revert-buffer)))))
 
-  (use-package nerd-icons
-    :ensure t)
+(use-package nerd-icons
+  :ensure t)
 
 (use-package nerd-icons-dired
-:ensure t
+  :ensure t
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
-(use-package pdf-tools
+(use-package nerd-icons-completion
   :ensure t
+  :after marginalia
   :config
-  (setq-default pdf-view-display-size 'fit-width)
+  (nerd-icons-completion-marginalia-setup)
+  (nerd-icons-completion-mode 1))
+
+(use-package nerd-icons-corfu
+  :ensure t
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
   )
+
+(use-package general
+  :ensure (:wait t)
+  :demand t
+  :config
+  ;;(general-evil-setup)
+
+  ;; set up 'SPC' as the global leader key
+  (general-create-definer pec/leader-keys
+    ;;:states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "S-SPC" ;; set leader
+    :non-normal-prefix "S-SPC"
+    ) 
+
+  (pec/leader-keys
+    "SPC" '(execute-extended-command :wk "M-x alternate")
+    "." '(consult-fd :wk "Find file")
+    "f c" '((lambda () (interactive) (find-file ~/.config/emacs/emacs.org)) :wk "Edit emacs config")
+    "TAB TAB" '(comment-line :wk "Comment lines"))
+
+  (pec/leader-keys
+    "b" '(:ignore t :wk "buffer")
+    "b b" '(consult-buffer :wk "Switch buffer")
+    "b i" '(ibuffer :wk "Ibuffer")
+    "b k" '(kill-this-buffer :wk "Kill this buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+    "b <up>" '(windmove-swap-states-up :wk "Buffer move up")
+    "b <down>" '(windmove-swap-states-down :wk "Buffer move down")
+    "b <left>" '(windmove-swap-states-left :wk "Buffer move left")
+    "b <right>" '(windmove-swap-states-right :wk "Buffer move right"))
+
+  (pec/leader-keys
+    "d" '(:ignore t :wk "Dired")
+    "d d" '(dired :wk "Open dired")
+    "d j" '(dired-jump :wk "Dired jump to current")
+    "d n" '(neotree-dir :wk "Open directory in neotree")
+    "d p" '(dired-preview-global-mo wde :wk "Dired preview mode toggle"))
+
+  (pec/leader-keys
+    "e" '(:ignore t :wk "Evaluate")
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate an eLisp expression")
+    "e f" '(ediff :wk "Start ediff")
+    "e l" '(eval-last-sexp :wk "Evaluate eLisp expression before point")
+    "e r" '(eval-region :wk "Evaluate eLisp in region")
+    "e s" '(eshell :wk "Wshell")
+    "e h" '(consult-history :wk "Eshell history"))
+
+  (pec/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h t" '(load-theme :wk "Load theme")
+    "h v" '(describe-variable :wk "Describe variable")
+    "h r r" '((lambda () (interactive)
+              (load-file user-init-file)
+              (ignore (elpaca-process-queues)))
+            :wk "Reload Emacs init.el"))
+
+  (pec/leader-keys
+    "m" '(:ignore t :wk "Org")
+    "m a" '(org-agenda :wk "Org agenda") 
+    "m b" '(org-babel-tangle :wk "Org babel tangle")
+    "m e" '(org-export-dispath :wk "Org export dispatch")
+    "m i" '(org-toggle-item :wk "Org toggle item")
+    "m h" '(consult-org-heading :wk "Goto Org heading")
+    "m t" '(org-todo :wk "Org todo")
+    "m T" '(org-todo-list :wk "Org todo list"))
+
+  (pec/leader-keys
+    "m l" '(:ignore t :wk "Org tables")
+    "m l -" '(org-table-insert-hline :wk "Insert hline in table"))
+
+  (pec/leader-keys
+    "m d" '(:ignore t :wk "Org date/deadline")
+    "m d t" '(org-time-stamp :wk "Org time stamp"))
+
+  (pec/leader-keys
+   "t" '(:ignore t :wk "Toggle/Tabs")
+   "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+   "t i" '(visual-line-mode :wk "Toggle truncated lines")
+   "t v" '(vterm-toggle :wk "Toggle vterm")
+   "t t" '(tab-new :wk "New Tab")
+   "t n" '(tab-next :wk "Next Tab")
+   "t p" '(tab-previous :wk "Previous Tab")
+   "t RET" '(tab-bar-select-tab-by-name :wk "Select tab by name"))
+
+  (pec/leader-keys
+   "w" '(:ignore t :wk "Windows")
+   "w c" '(delete-window :wk "Close window")
+   "w n" '(evil-window-new :wk "New window")
+   "w s" '(split-window-below :wk "Horizontal split window")
+   "w v" '(split-window-right :wk "Vertically split window")
+   "w <up>" '(windmove-up :wk "Window up")        
+   "w <down>" '(windmove-down :wk "Window down")
+   "w <left>" '(windmove-left :wk "Window left")
+   "w <right>" '(windmove-right :wk "Window right")
+   "w w" '(evil-window-next :wk "Goto next window")
+   "w u" '(winner-undo :wk "Winner undo")
+   "w U" '(winner-redo :wk "Winner redo"))
+
+  (pec/leader-keys
+    "o" '(ace-window :wk "Ace window"))
+  )
+
+(defvar-keymap pec/window-keys
+  :name "window"
+  :repeat t
+  "<left>" #'windmove-left
+  "<right>" #'windmove-right
+  "<up>" #'windmove-up
+  "<down>" #'windmove-down)
+
+ (keymap-global-set "C-c w" pec/window-keys)
+
+(use-package pdf-tools
+  :defer t
+  :commands (pdf-loader-install)
+  :mode "\\.pdf\\'"
+  :ensure t
+  :bind (:map pdf-view-mode-map
+  	    ("<down>" . pdf-view-next-line-or-next-page)
+  	    ("<up>" . pdf-view-previous-line-or-previous-page)
+  	    ("C-=" . pdf-view-enlarge)
+  	    ("C--" . pdf-view-shrink))
+  :init (pdf-loader-install)
+  :config
+  (add-to-list 'revert-without-query ".pdf")
+  (setq-default pdf-view-display-size 'fit-width))
 
 (use-package flycheck
   :ensure t
@@ -739,17 +782,17 @@
   :init
   (setq lsp-keymap-prefix "C-l")
   :hook ((c-mode . lsp-deferred)
-	 (c-ts-mode . lsp-deferred)
-	 (c++-mode . lsp-deferred)
-	 (c++-ts-mode . lsp-deferred)
-	 (typescript-ts-mode . lsp-deferred)
-	 (js-ts-mode . lsp-deferred)
-	 (python-mode . lsp-deferred)
-	 (python-ts-mode . lsp-deferred)
-	 )
+       (c-ts-mode . lsp-deferred)
+       (c++-mode . lsp-deferred)
+       (c++-ts-mode . lsp-deferred)
+       (typescript-ts-mode . lsp-deferred)
+       (js-ts-mode . lsp-deferred)
+       (python-mode . lsp-deferred)
+       (python-ts-mode . lsp-deferred)
+       )
   :config
   (setq lsp-enable-which-key-integration 1)
-     
+
   )
 
 (use-package consult-lsp
@@ -757,8 +800,13 @@
   :after lsp
   :after consult
   :commands (consult-lsp-symbols
-	     consult-lsp-file-symbols
-	     consult-lsp-diagnostics)
+  	   consult-lsp-file-symbols
+  	   consult-lsp-diagnostics)
+  )
+
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs)
+  :ensure t
   )
 
 (use-package treesit-auto
@@ -787,7 +835,7 @@
                        (org-level-7 . 1.1)	
                        (org-level-8 . 1.1)))	
        (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
- 
+
        (setq org-startup-indented 1)
        (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
        (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
@@ -870,6 +918,7 @@
 
 (use-package sudo-edit
   :ensure t
+  :after general
   :config
   (pec/leader-keys
    "f u" '(sudo-edit-find-file :wk "Sudo find file")
@@ -903,13 +952,13 @@
   :diminish which-key-mode
   :config
   (setq which-key-side-window-location 'bottom
-	  which-key-sort-order #'which-key-key-order-alpha
-	  which-key-sort-uppercase-first nil
-	  which-key-add-column-padding 1
-	  which-key-min-display-lines 6
-	  which-key-side-window-slot -10
-	  which-key-side-window-max-height 0.25
-	  which-key-mode-delay 0.8
-	  which-key-max-description-length 25
-	  which-key-allow-imprecise-window-fit nil
-	  which-key-separator " → "))
+	which-key-sort-order #'which-key-key-order-alpha
+	which-key-sort-uppercase-first nil
+	which-key-add-column-padding 1
+	which-key-min-display-lines 6
+	which-key-side-window-slot -10
+	which-key-side-window-max-height 0.25
+	which-key-mode-delay 0.8
+	which-key-max-description-length 25
+	which-key-allow-imprecise-window-fit nil
+	which-key-separator " → "))
